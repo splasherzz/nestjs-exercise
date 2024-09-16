@@ -7,7 +7,7 @@ export class BooksService {
     private books = [];
     private bookID = 1;
 
-    createBook(createBookDto: CreateBookDto) {
+    create(createBookDto: CreateBookDto) {
         const newBook = {
             id: this.bookID++,
             ...createBookDto
@@ -16,11 +16,11 @@ export class BooksService {
         return newBook;
     }
 
-    getAll() {
+    findAll() {
         return this.books;
     }
         
-    getOneBook(id: number) {
+    findOne(id: number) {
         const book = this.books.find((book) => book.id === id);
         if (!book) {
             throw new NotFoundException('Book not found');
@@ -28,8 +28,8 @@ export class BooksService {
         return book;
     }
 
-    updateBook(id: number, updateBookDto: UpdateBookDto) {
-        const book = this.getOneBook(id);
+    update(id: number, updateBookDto: UpdateBookDto) {
+        const book = this.findOne(id);
         const updatedBook = { ...book, ...updateBookDto };
         this.books = this.books.map((book) =>
             book.id === id ? updatedBook : book
@@ -37,8 +37,8 @@ export class BooksService {
         return updatedBook;
     }
 
-    deleteBook(id: number) {
-        const book = this.getOneBook(id);
+    remove(id: number) {
+        const book = this.findOne(id);
         this.books = this.books.filter((book) => book.id !== id);
         return book;
     }
