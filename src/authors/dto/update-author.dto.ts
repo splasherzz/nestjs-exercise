@@ -1,13 +1,11 @@
-import { IsString, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsOptional, IsArray } from 'class-validator';
 
 export class UpdateAuthorDto {
-    @IsString()
-    @IsOptional()
-    @MinLength(1)
-    firstName?: string;
+  @IsString()
+  @IsOptional()
+  name?: string;  
 
-    @IsString()
-    @IsOptional()
-    @MinLength(2)
-    lastName?: string;
+  @IsArray()
+  @IsOptional()
+  books?: number[];  
 }

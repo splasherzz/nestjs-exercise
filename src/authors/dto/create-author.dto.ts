@@ -1,11 +1,11 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsArray, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateAuthorDto {
     @IsString()
-    @IsNotEmpty({ message: 'First name is required' })
-    firstName: string;
-
-    @IsString()
-    @IsNotEmpty({ message: 'Last name is required' })
-    lastName: string;
-}
+    @IsNotEmpty()
+    name: string;  
+  
+    @IsArray()
+    @IsOptional()
+    books?: number[]; 
+  }

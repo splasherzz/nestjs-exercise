@@ -1,4 +1,4 @@
-import { IsString, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsArray, IsOptional, MinLength } from 'class-validator';
 
 export class UpdateBookDto {
   @IsString()
@@ -6,15 +6,9 @@ export class UpdateBookDto {
   @MinLength(2)
   title?: string;
 
-  @IsString()
+  @IsArray()
   @IsOptional()
-  @MinLength(1)
-  authorFirstName?: string;
-
-  @IsString()
-  @IsOptional()
-  @MinLength(2)
-  authorLastName?: string;
+  authors?: number[];
 
   @IsString()
   @IsOptional()

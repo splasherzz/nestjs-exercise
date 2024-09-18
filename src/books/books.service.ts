@@ -1,45 +1,54 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
+import { AuthorsService } from '../authors/authors.service';
+import { AbstractService } from '../class/abstract-service';
 
 @Injectable()
-export class BooksService {
-    private books = [];
-    private bookID = 1;
-
-    create(createBookDto: CreateBookDto) {
-        const newBook = {
-            id: this.bookID++,
-            ...createBookDto
-        };
-        this.books.push(newBook);
-        return newBook;
+export class BooksService extends AbstractService<CreateBookDto> {
+    constructor(@Inject(forwardRef(() => AuthorsService)) private authorsService: AuthorsService) {
+        super();
     }
 
-    findAll() {
-        return this.books;
+    getItemType(): string {
+        return 'Book';
     }
+
+    addAuthorToBook(bookId: number, authorId: number) {
+        const book = this.findOne(bookId);
+        const author = this.authorsService.findOne(authorId);
+        if (!author) {
+            throw new NotFoundException('Author not found');
+        }
+
+        if (!book.authors) {
+            book.authors = [];
+        }
+
+        book.authors.push(authorId);
+        this.update(bookId, book);
+
+        this.authorsService.addBookToAuthor(authorId, bookId);
+        return book;
+    }
+
+    remove(bookId: number) {
+        const book = this.findOne(bookId);  
         
-    findOne(id: number) {
-        const book = this.books.find((book) => book.id === id);
         if (!book) {
             throw new NotFoundException('Book not found');
         }
-        return book;
-    }
 
-    update(id: number, updateBookDto: UpdateBookDto) {
-        const book = this.findOne(id);
-        const updatedBook = { ...book, ...updateBookDto };
-        this.books = this.books.map((book) =>
-            book.id === id ? updatedBook : book
-        );
-        return updatedBook;
-    }
+        if (book.authors && book.authors.length > 0) {
+            book.authors.forEach(authorId => {
+                const author = this.authorsService.findOne(authorId);
+                if (author && author.books) {
+                    author.books = author.books.filter(bId => bId != bookId);
+                    this.authorsService.update(authorId, author);  
+                }
+            });
+        }
 
-    remove(id: number) {
-        const book = this.findOne(id);
-        this.books = this.books.filter((book) => book.id !== id);
-        return book;
+        return super.remove(bookId);
     }
 }
+

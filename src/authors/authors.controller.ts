@@ -15,6 +15,15 @@ export class AuthorsController {
         return this.authorsService.create(createAuthorDto);
     }
 
+    @Post(':authorId/books/:bookId')
+    @UsePipes(new ValidationPipe())
+    addBookToAuthor(
+        @Param('authorId') authorId: number,
+        @Param('bookId') bookId: number
+    ) {
+        return this.authorsService.addBookToAuthor(authorId, bookId);
+    }
+
     @Get()
     findAll() {
         return this.authorsService.findAll();
@@ -35,4 +44,5 @@ export class AuthorsController {
     remove(@Param('id') id: number) {
         return this.authorsService.remove(+id);
     }
+
 }

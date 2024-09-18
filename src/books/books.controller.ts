@@ -15,6 +15,14 @@ export class BooksController {
         return this.booksService.create(createBookDto);
     }
 
+    @Post(':bookId/authors/:authorId')
+    addAuthorToBook(
+        @Param('bookId') bookId: number,
+        @Param('authorId') authorId: number
+    ) {
+        return this.booksService.addAuthorToBook(bookId, authorId);
+    }
+
     @Get()
     findAll() {
         return this.booksService.findAll();
