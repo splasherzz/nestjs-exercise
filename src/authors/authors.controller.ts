@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UsePipes, ValidationPipe, UseFilters } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseFilters } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
-import { CreateAuthorDto } from './dto/create-author.dto';
-import { UpdateAuthorDto } from './dto/update-author.dto';
+import { CreateAuthorDto } from '../dto/create-author.dto';
+import { UpdateAuthorDto } from '../dto/update-author.dto';
 import { HttpExceptionFilter } from '../filters/http-exception/http-exception.filter';
 
 @Controller('authors')
@@ -10,13 +10,11 @@ export class AuthorsController {
     constructor(private readonly authorsService: AuthorsService) { }
 
     @Post()
-    @UsePipes(new ValidationPipe())
     create(@Body() createAuthorDto: CreateAuthorDto) {
         return this.authorsService.create(createAuthorDto);
     }
 
     @Post(':authorId/books/:bookId')
-    @UsePipes(new ValidationPipe())
     addBookToAuthor(
         @Param('authorId') authorId: number,
         @Param('bookId') bookId: number
@@ -35,7 +33,6 @@ export class AuthorsController {
     }
 
     @Put(':id')
-    @UsePipes(new ValidationPipe())
     update(@Param('id') id: number, @Body() updateAuthorDto: UpdateAuthorDto) {
         return this.authorsService.update(+id, updateAuthorDto);
     }

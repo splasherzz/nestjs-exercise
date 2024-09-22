@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
-import { CreateAuthorDto } from './dto/create-author.dto';
+import { CreateAuthorDto } from '../dto/create-author.dto';
 import { AbstractService } from '../class/abstract-service';
 import { BooksService } from '../books/books.service';
 
