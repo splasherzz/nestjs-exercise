@@ -1,3 +1,5 @@
+import { NotFoundException } from '@nestjs/common';
+
 export abstract class AbstractService<T> {
     protected items: T[] = [];
     protected currentId = 1;
@@ -15,7 +17,7 @@ export abstract class AbstractService<T> {
     findOne(id: number): T {
       const item = this.items.find((item) => (item as any).id == id);
       if (!item) {
-        throw new Error(`Item ${id} not found`);
+        throw new NotFoundException(`Item ${id} not found`);
       }
       return item;
     }
@@ -33,6 +35,5 @@ export abstract class AbstractService<T> {
       return item;
     }
   
-    abstract getItemType(): string;
   }
   

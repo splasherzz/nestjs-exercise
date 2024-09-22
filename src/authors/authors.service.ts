@@ -32,7 +32,7 @@ export class AuthorsService extends AbstractService<CreateAuthorDto> {
         const author = this.findOne(authorId);
 
         if (!author) {
-            throw new NotFoundException('Author not found');
+            throw new Error(`Item ${authorId} not found`);
         }
 
         if (author.books && author.books.length > 0) {

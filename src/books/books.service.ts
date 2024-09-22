@@ -35,7 +35,7 @@ export class BooksService extends AbstractService<CreateBookDto> {
         const book = this.findOne(bookId);  
         
         if (!book) {
-            throw new NotFoundException('Book not found');
+            throw new Error(`Item ${bookId} not found`);
         }
 
         if (book.authors && book.authors.length > 0) {
